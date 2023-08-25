@@ -46,10 +46,10 @@ func (ur *UserRepository) FindAll() error {
 	return err
 }
 
-func (ur *UserRepository) Update(ID int, user models.User) error {
+func (ur *UserRepository) Update(ID int, field string, value string) error {
 	tx := ur.db.Begin()
 
-	err := tx.Model(models.User{}).Where("id = ?", ID).Updates(user).Error
+	err := tx.Model(models.User{}).Where("id = ?", ID).Update(field, value).Error
 	if err != nil {
 		tx.Rollback()
 		return err
