@@ -1,17 +1,17 @@
 package main
 
 import (
-	"net/http"
+	"blutzerz/sawerya/configs"
+	"blutzerz/sawerya/routes"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+
+	configs.InitDB()
+
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run(":8081")
+
+	routes.RegisterRoutes(r)
 }
