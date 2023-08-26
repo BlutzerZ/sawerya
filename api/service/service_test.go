@@ -30,16 +30,18 @@ func TestUserService(t *testing.T) {
 
 	t.Run("UpdateUsername", func(t *testing.T) {
 		req := new(dto.UpdateUsernameRequest)
+		req.ID = 1
 		req.Username = "test123"
 		req.Password = "testpwd123"
-		result := s.UpdateUsername(1, req)
+		result := s.UpdateUsername(req)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("UpdatePassword", func(t *testing.T) {
 		req := new(dto.UpdatePasswordRequest)
+		req.ID = 1
 		req.OldPassword = "testpwd123"
 		req.Password = "testnewpwd123"
-		result := s.UpdatePassword(1, req)
+		result := s.UpdatePassword(req)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("DeleteUser", func(t *testing.T) {

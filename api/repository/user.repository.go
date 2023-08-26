@@ -8,17 +8,18 @@ import (
 )
 
 type UserRepository struct {
-	db *gorm.DB
+	DB *gorm.DB
 }
 
 func NewUserRepository() *UserRepository {
+	DB := configs.GetDB()
 	return &UserRepository{
-		db: configs.GetDB(),
+		DB: DB,
 	}
 }
 
 func (ur *UserRepository) Create(user models.User) error {
-	tx := ur.db.Begin()
+	tx := ur.DB.Begin()
 
 	err := tx.Create(&user).Error
 	if err != nil {
@@ -30,26 +31,26 @@ func (ur *UserRepository) Create(user models.User) error {
 	return err
 }
 
-func (ur *UserRepository) FindByID(ID int) error {
+func (ur *UserRepository) FindByID(ID int) (models.User, error) {
 	var user models.User
 
-	err := ur.db.Where("id = ?", ID).First(&user).Error
+	err := ur.DB.Where("id = ?", ID).First(&user).Error
 
-	return err
+	return user, err
 }
 
-func (ur *UserRepository) FindAll() error {
+func (ur *UserRepository) FindAll() ([]models.User, error) {
 	var users []models.User
 
-	err := ur.db.Find(&users).Error
+	err := ur.DB.Find(&users).Error
 
-	return err
+	return users, err
 }
 
 func (ur *UserRepository) Update(ID int, field string, value string) error {
-	tx := ur.db.Begin()
+	tx := ur.DB.Begin()
 
-	err := tx.Model(models.User{}).Where("id = ?", ID).Update(field, value).Error
+	err := tx.Model(&models.User{}).Where("id = ?", ID).Update(field, value).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -60,7 +61,7 @@ func (ur *UserRepository) Update(ID int, field string, value string) error {
 }
 
 func (ur *UserRepository) Delete(ID int) error {
-	tx := ur.db.Begin()
+	tx := ur.DB.Begin()
 
 	err := tx.Delete(&models.User{}, ID).Error
 	if err != nil {

@@ -24,11 +24,15 @@ func TestRepository(t *testing.T) {
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("find", func(t *testing.T) {
-		result := ur.FindByID(1)
+		_, result := ur.FindByID(1)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
-	t.Run("update", func(t *testing.T) {
+	t.Run("updateUsername", func(t *testing.T) {
 		result := ur.Update(1, "username", "testnew")
+		assert.Equal(t, nil, result, "result must be nil")
+	})
+	t.Run("updatePassword", func(t *testing.T) {
+		result := ur.Update(1, "password", "passwordnew")
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("delete", func(t *testing.T) {
