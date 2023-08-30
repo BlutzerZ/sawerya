@@ -3,12 +3,13 @@ package repository
 import (
 	"blutzerz/sawerya/api/models"
 	"blutzerz/sawerya/configs"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRepository(t *testing.T) {
+func TestUserRepository(t *testing.T) {
 	configs.InitDB()
 
 	ur := NewUserRepository()
@@ -39,5 +40,48 @@ func TestRepository(t *testing.T) {
 		result := ur.Delete(1)
 		assert.Equal(t, nil, result, "result must be nil")
 
+	})
+}
+
+func TestAlertRepository(t *testing.T) {
+	configs.InitDB()
+
+	ar := NewAlertRepository()
+
+	alert := models.Alert{
+		EnableGif:       false,
+		MinAmountNotify: 5000,
+		MinAmountGIF:    5000,
+		Sound:           "default",
+	}
+	alertDesign := models.AlertDesign{
+		BackgroundColor: "#199999",
+		HighlightColor:  "#000000",
+		TextColor:       "#000000",
+		TextTemplate:    "baru saja memberikan",
+		Border:          false,
+		TextTickness:    100,
+		Duration:        5,
+		Font:            "arial",
+	}
+
+	t.Run("updateALert", func(t *testing.T) {
+		result := ar.UpdateAlert(1, &alert)
+		assert.Equal(t, nil, result, "result must be nil")
+	})
+
+	var alertResult models.Alert
+	t.Run("getAlertByID", func(t *testing.T) {
+		var result error
+		alertResult, result = ar.FindAlertByUserID(1)
+		assert.Equal(t, nil, result, "result mus be nil")
+	})
+	alertResult.AlertDesign = &alertDesign
+
+	fmt.Println(alertResult.ID)
+
+	t.Run("updateAlertDesign", func(t *testing.T) {
+		result := ar.UpdateAlertDesign(&alertResult)
+		assert.Equal(t, nil, result, "result must be nil")
 	})
 }

@@ -23,7 +23,7 @@ func InitDB() error {
 		return err
 	}
 
-	dbClient.AutoMigrate(&models.User{})
+	dbClient.AutoMigrate(&models.User{}, models.Alert{}, models.AlertDesign{})
 
 	return nil
 }
