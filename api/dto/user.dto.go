@@ -6,6 +6,11 @@ type RegisterUserRequest struct {
 	Password string `json:"password" binding:"required,min=8"`
 }
 
+type LoginUserRequest struct {
+	Email    string `json:"email" binding:"required,min=5"`
+	Password string `json:"password" binding:"required,min=8"`
+}
+
 type UpdateUsernameRequest struct {
 	ID       int    `json:"id" binding:"required"`
 	Username string `json:"username" binding:"required,min=5"`
