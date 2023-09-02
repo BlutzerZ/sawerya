@@ -38,17 +38,18 @@ func (ac *AuthController) LoginUser(c *gin.Context) {
 		return
 	}
 
-	err = ac.service.Login(req)
+	token, err := ac.service.Login(req)
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{
-			"message": "status welek",
+			"message": "login failed",
 			"error":   err,
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "status joss",
+		"message": "login success",
+		"token":   token,
 	})
 
 }

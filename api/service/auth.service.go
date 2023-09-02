@@ -22,17 +22,17 @@ func NewAuthService() *AuthService {
 	}
 }
 
-func (as *AuthService) Login(req *dto.LoginUserRequest) error {
+func (as *AuthService) Login(req *dto.LoginUserRequest) (string, error) {
 	var user models.User
 
 	err := as.db.Where("email = ?", req.Email).First(&user).Error
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// jwt
@@ -51,7 +51,7 @@ func (as *AuthService) Login(req *dto.LoginUserRequest) error {
 	ss, err := token.SignedString(configs.JWT_KEY)
 	fmt.Printf("%v %v", ss, err)
 
-	return nil
+	return ss, err
 }
 
 func (as *AuthService) Logout(req *dto.LoginUserRequest) error {
