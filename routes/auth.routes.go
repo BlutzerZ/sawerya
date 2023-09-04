@@ -10,5 +10,5 @@ func AuthRoutes(group *gin.RouterGroup) {
 	ac := controllers.NewAuthController()
 
 	group.POST("/login", ac.LoginUser)
-	// group.PUT("/logout", ac.Logout)
+	group.POST("/refresh-token", ac.RefreshToken)
 }
