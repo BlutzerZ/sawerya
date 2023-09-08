@@ -7,6 +7,7 @@ func RegisterRoutes(r *gin.Engine) {
 
 	UserRoutes(apiGroup)
 	AuthRoutes(apiGroup)
+	OverlayRoutes(apiGroup)
 
 	r.Run()
 }

@@ -49,8 +49,8 @@ func TestAlertRepository(t *testing.T) {
 	ar := NewAlertRepository()
 
 	alert := models.Alert{
-		EnableGif:       false,
-		MinAmountNotify: 5000,
+		EnableGif:       0,
+		MinAmountNotify: 9000,
 		MinAmountGIF:    5000,
 		Sound:           "default",
 	}
@@ -59,14 +59,14 @@ func TestAlertRepository(t *testing.T) {
 		HighlightColor:  "#000000",
 		TextColor:       "#000000",
 		TextTemplate:    "baru saja memberikan",
-		Border:          false,
+		Border:          0,
 		TextTickness:    100,
 		Duration:        5,
 		Font:            "arial",
 	}
 
 	t.Run("updateALert", func(t *testing.T) {
-		result := ar.UpdateAlert(1, &alert)
+		result := ar.UpdateAlert(8, &alert)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 

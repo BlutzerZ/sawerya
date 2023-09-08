@@ -1,8 +1,8 @@
 package models
 
 type Alert struct {
-	ID              int `gorm:"type:integer; primaryKey"`
-	EnableGif       bool
+	ID              int   `gorm:"type:integer; primaryKey"`
+	EnableGif       uint8 `gorm:"type:tinyint(1)"`
 	MinAmountNotify uint
 	MinAmountGIF    uint
 	Sound           string
@@ -18,7 +18,7 @@ type AlertDesign struct {
 	HighlightColor  string
 	TextColor       string
 	TextTemplate    string
-	Border          bool
+	Border          uint8 `gorm:"type:tinyint(1)"`
 	TextTickness    uint
 	Duration        uint
 	Font            string

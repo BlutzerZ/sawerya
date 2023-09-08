@@ -17,14 +17,13 @@ func NewAlertService() *AlertService {
 	}
 }
 
-func (s *AlertService) GetAlertByUserID(ID int) (models.Alert, error) {
+func (s *AlertService) GetAlertByUserID(ID uint) (models.Alert, error) {
 	alert, err := s.repository.FindAlertByUserID(ID)
 
 	return alert, err
 }
 
-func (s *AlertService) UpdateAlert(req *dto.UpdateAlertRequest) error {
-	ID := 2 // soon need update with session
+func (s *AlertService) UpdateAlert(ID uint, req *dto.UpdateAlertRequest) error {
 	alert := models.Alert{
 		EnableGif:       req.EnableGif,
 		MinAmountNotify: req.MinAmountNotify,
@@ -33,13 +32,12 @@ func (s *AlertService) UpdateAlert(req *dto.UpdateAlertRequest) error {
 		WordFilter:      req.WordFilter,
 	}
 
-	err := s.repository.UpdateAlert(uint(ID), &alert)
+	err := s.repository.UpdateAlert(ID, &alert)
 
 	return err
 }
 
-func (s *AlertService) UpdateAlertDesign(req *dto.UpdateAlertDesignRequest) error {
-	ID := 2 // soon need update with session
+func (s *AlertService) UpdateAlertDesign(ID uint, req *dto.UpdateAlertDesignRequest) error {
 	alert, err := s.repository.FindAlertByUserID(ID)
 	if err != nil {
 		return err

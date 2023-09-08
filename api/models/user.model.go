@@ -49,7 +49,7 @@ func (u *User) BeforeUpdate(tx *gorm.DB) error {
 // After
 func (u *User) AfterCreate(tx *gorm.DB) error {
 	alert := Alert{
-		EnableGif:       false,
+		EnableGif:       0,
 		MinAmountNotify: 5000,
 		MinAmountGIF:    5000,
 		Sound:           "default",
@@ -60,7 +60,7 @@ func (u *User) AfterCreate(tx *gorm.DB) error {
 		HighlightColor:  "#000000",
 		TextColor:       "#000000",
 		TextTemplate:    "baru saja memberikan",
-		Border:          false,
+		Border:          0,
 		TextTickness:    100,
 		Duration:        5,
 		Font:            "arial",

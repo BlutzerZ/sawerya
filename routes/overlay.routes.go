@@ -1,10 +1,18 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"blutzerz/sawerya/api/controllers"
+	"blutzerz/sawerya/middleware"
 
-func OverlayRoutes(r *gin.Engine) {
-	// r.GET("/overlay/alert", controllers.GetOverlayAlertUrl)
-	// r.PUT("/overlay/alert", controllers.EditOverlayAlert)
+	"github.com/gin-gonic/gin"
+)
+
+func OverlayRoutes(group *gin.RouterGroup) {
+	ac := controllers.NewAlertController()
+
+	group.GET("/overlay/alert/:id", middleware.JWTAuth(), ac.GetAlertByUserID)
+	group.PUT("/overlay/alert", middleware.JWTAuth(), ac.UpdateAlert)
+	group.PUT("/overlay/alert/design", middleware.JWTAuth(), ac.UpdateAlertDesign)
 
 	// r.GET("/overlay/mediashare", controllers.GetOverlayAlertUrl)
 	// r.PUT("/overlay/mediashare", controllers.EditOverlayAlert)
