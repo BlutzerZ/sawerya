@@ -2,6 +2,7 @@ package service
 
 import (
 	"blutzerz/sawerya/api/dto"
+	"blutzerz/sawerya/api/models"
 	"blutzerz/sawerya/configs"
 	"fmt"
 	"testing"
@@ -77,4 +78,29 @@ func TestAlertService(t *testing.T) {
 		err := s.UpdateAlertDesign(1, req)
 		assert.Equal(t, nil, err, "must be nil")
 	})
+}
+
+func TestTransactionService(t *testing.T) {
+	configs.InitDB()
+	s := NewTransactionService()
+
+	req := new(dto.CreateTransactionRequest)
+	req.Amount = 5000
+	req.Email = "pler@gmail.com"
+	req.InvoiceDuration = 10
+	req.Type = 1
+	req.Sender = "jamal"
+
+	transaction := models.Transaction{
+		Amount:        req.Amount,
+		Description:   req.Description,
+		Sender:        req.Sender,
+		Email:         req.Email,
+		PaymentMethod: "",
+		TypeID:        req.Type,
+	}
+
+	err := s.CreateTransaction(transaction)
+	assert.Equal(t, nil, err, "must be nil")
+
 }

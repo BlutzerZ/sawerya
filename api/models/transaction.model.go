@@ -8,19 +8,18 @@ import (
 )
 
 type Transaction struct {
-	ID              string
-	Amount          int
+	ID              uint `gorm:"type:integer; primaryKey"`
+	Amount          uint
 	Description     string
-	InvoiceDuration int
 	Sender          string
 	Email           string
 	PaymentMethod   string
-	TypeID          uint8
+	TypeID          uint
 	TransactionType TransactionType `gorm:"foreignKey:TypeID"`
 }
 
 type TransactionType struct {
-	ID   uint
+	ID   uint `gorm:"primaryKey"`
 	Type string
 }
 
