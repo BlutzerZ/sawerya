@@ -85,3 +85,7 @@ func TestAlertRepository(t *testing.T) {
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 }
+
+// func TestTransactionRepository(t *testing.T) {
+
+// }

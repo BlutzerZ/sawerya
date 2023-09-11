@@ -12,9 +12,8 @@ type UserRepository struct {
 }
 
 func NewUserRepository() *UserRepository {
-	DB := configs.GetDB()
 	return &UserRepository{
-		DB: DB,
+		DB: configs.GetDB(),
 	}
 }
 
