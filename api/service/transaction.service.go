@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 type TransactionService struct {
@@ -20,46 +21,73 @@ func NewTransactionService() *TransactionService {
 	}
 }
 
-func (s *TransactionService) CreateInvoice(TID int, req *dto.CreateTransactionRequest) (string, error) {
-	reqUrl := fmt.Sprintf("https://api.xendit.co/v2/invoices")
+func (s *TransactionService) CreateInvoice(transaction *models.Transaction) (*dto.CreateTransactionResponse, error) {
 
-	requestData := map[string]interface{}{
-		"external_id": TID,
-		"amount":      req.Amount,
+	url := "https://api.xendit.co/v2/invoices"
+
+	// BODY
+	data := map[string]interface{}{
+		"external_id": transaction.ID,
+		"amount":      transaction.Amount,
+		"currency":    "IDR",
 		"customer": map[string]interface{}{
-			"email": req.Email,
+			"given_name": transaction.Sender,
+			"email":      transaction.Email,
 		},
 	}
-
-	requestBody, err := json.Marshal(requestData)
+	jsonData, err := json.Marshal(data)
 	if err != nil {
-		return "", err
+		fmt.Println("Error:", err)
+		return nil, err
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, reqUrl, bytes.NewBuffer(requestBody))
+	httpReq, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
-		return "", err
+		fmt.Println("Error:", err)
+		return nil, err
 	}
 
-	httpReq.Header.Set("Authorization", "Bearer xnd_public_development_aZho51dSsowWNPOvAs9kgSuyFXAeXHMiWHAVw02v0523s0BHIBPnM0KgGbu1KN")
+	// HEADER
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set("Authorization", "Basic "+os.Getenv("XENDIT_TOKEN"))
 
 	client := &http.Client{}
 	resp, err := client.Do(httpReq)
 	if err != nil {
-		return "", err
+		fmt.Println("Error:", err)
+		return nil, err
+
 	}
 	defer resp.Body.Close()
 
-	// READ
-	respondBuffer := new(bytes.Buffer)
-	respondBuffer.ReadFrom(resp.Body)
-	respondString := respondBuffer.String()
+	// Membaca respons
+	fmt.Println("Status Code:", resp.Status)
 
-	return respondString, nil
+	// RESPONSE BODY
+	var createTransactionResponse *dto.CreateTransactionResponse
+	decoder := json.NewDecoder(resp.Body)
+	if err := decoder.Decode(&createTransactionResponse); err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+
+	}
+
+	fmt.Println("Response Body:", createTransactionResponse)
+
+	return createTransactionResponse, nil
 }
 
-func (s *TransactionService) CreateTransaction(transaction models.Transaction) error {
-	err := s.repository.CreateNewTransaction(transaction)
-	return err
+func (s *TransactionService) CreateTransaction(req *dto.CreateTransactionRequest) (models.Transaction, error) {
+
+	transaction := models.Transaction{
+		Amount:      req.Amount,
+		Description: req.Description,
+		Sender:      req.Sender,
+		Email:       req.Email,
+		TypeID:      req.Type,
+	}
+
+	err := s.repository.CreateNewTransaction(&transaction)
+	return transaction, err
 
 }

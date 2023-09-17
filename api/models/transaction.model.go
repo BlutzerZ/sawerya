@@ -3,17 +3,22 @@ package models
 import (
 	"fmt"
 	"math/rand"
+	"time"
 
 	"gorm.io/gorm"
 )
 
 type Transaction struct {
-	ID              uint `gorm:"type:integer; primaryKey"`
+	ID              string `gorm:"type:string; primaryKey"`
 	Amount          uint
 	Description     string
 	Sender          string
 	Email           string
 	PaymentMethod   string
+	Status          string
+	PaidAt          time.Time
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 	TypeID          uint
 	TransactionType TransactionType `gorm:"foreignKey:TypeID"`
 }
@@ -23,9 +28,14 @@ type TransactionType struct {
 	Type string
 }
 
-func (t *Transaction) BeforeCreate(tx *gorm.DB) {
-	randTID := fmt.Sprintf("sawerya-%s", randStringRune(8))
+func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
+	randTID := fmt.Sprintf("sawerya-%s", randStringRune(16))
+
 	tx.Statement.SetColumn("ID", randTID)
+	tx.Statement.SetColumn("Status", "UNPAID")
+
+	return nil
+
 }
 
 func randStringRune(n int) string {

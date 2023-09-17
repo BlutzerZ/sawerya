@@ -86,21 +86,29 @@ func TestTransactionService(t *testing.T) {
 
 	req := new(dto.CreateTransactionRequest)
 	req.Amount = 5000
-	req.Email = "pler@gmail.com"
-	req.InvoiceDuration = 10
-	req.Type = 1
 	req.Sender = "jamal"
+	req.Email = "pler@gmail.com"
+	req.Type = 1
 
 	transaction := models.Transaction{
-		Amount:        req.Amount,
-		Description:   req.Description,
-		Sender:        req.Sender,
-		Email:         req.Email,
-		PaymentMethod: "",
-		TypeID:        req.Type,
+		Amount:      req.Amount,
+		Description: req.Description,
+		Sender:      req.Sender,
+		Email:       req.Email,
+		TypeID:      req.Type,
 	}
 
-	err := s.CreateTransaction(transaction)
-	assert.Equal(t, nil, err, "must be nil")
+	t.Run("CreateTransaction", func(t *testing.T) {
+		var err error
+		transaction, err = s.CreateTransaction(req)
+		assert.Equal(t, nil, err, "must be nil")
+	})
+
+	t.Run("CreateInvoice", func(t *testing.T) {
+		res, err := s.CreateInvoice(&transaction)
+		fmt.Println(res)
+		assert.Equal(t, nil, err, "must be nil")
+
+	})
 
 }

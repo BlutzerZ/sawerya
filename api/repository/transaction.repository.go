@@ -17,8 +17,8 @@ func NewTransactionRepository() *TransactionRepository {
 	}
 }
 
-func (r *TransactionRepository) CreateNewTransaction(transaction models.Transaction) error {
-	err := r.db.Create(transaction).Error
+func (r *TransactionRepository) CreateNewTransaction(transaction *models.Transaction) error {
+	err := r.db.Create(&transaction).Error
 
 	return err
 }

@@ -1,6 +1,10 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"os"
+
+	"github.com/gin-gonic/gin"
+)
 
 func RegisterRoutes(r *gin.Engine) {
 	apiGroup := r.Group("/api")
@@ -8,6 +12,7 @@ func RegisterRoutes(r *gin.Engine) {
 	UserRoutes(apiGroup)
 	AuthRoutes(apiGroup)
 	OverlayRoutes(apiGroup)
+	TransactionRoutes(apiGroup)
 
-	r.Run()
+	r.Run(":" + os.Getenv("HOST_PORT"))
 }
