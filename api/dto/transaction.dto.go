@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type CreateTransactionRequest struct {
 	Amount      uint   `json:"amount" binding:"required"`
 	Description string `json:"description"`
@@ -18,11 +20,12 @@ type CreateTransactionResponse struct {
 	UpdatedAt  string `json:"updated"`
 }
 
-type InvoiceCallbackResponse struct {
-	ExternalID    string `json:"external_id"`
-	PaymentMethod string `json:"payment_method"`
-	PaidAmount    string `json:"paid_amount"`
-	PaidAt        string `json:"paid_at"`
-	Created       string `json:"created"`
-	Updated       string `json:"updated"`
+type InvoiceCallbackRequest struct {
+	ExternalID    string    `json:"external_id"`
+	Status        string    `json:"status"`
+	PaymentMethod string    `json:"payment_method"`
+	PaidAmount    uint      `json:"paid_amount"`
+	PaidAt        time.Time `json:"paid_at"`
+	Created       time.Time `json:"created"`
+	Updated       time.Time `json:"updated"`
 }

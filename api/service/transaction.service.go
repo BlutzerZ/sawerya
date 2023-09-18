@@ -91,3 +91,17 @@ func (s *TransactionService) CreateTransaction(req *dto.CreateTransactionRequest
 	return transaction, err
 
 }
+
+func (s *TransactionService) UpdateTransaction(req *dto.InvoiceCallbackRequest) error {
+	transaction := models.Transaction{
+		ID:            req.ExternalID,
+		Status:        req.Status,
+		PaymentMethod: req.PaymentMethod,
+		PaidAt:        req.PaidAt,
+		UpdatedAt:     req.Updated,
+	}
+
+	err := s.repository.UpdateTransaction(&transaction)
+
+	return err
+}
