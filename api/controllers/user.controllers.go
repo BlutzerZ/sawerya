@@ -44,6 +44,7 @@ func (uc *UserController) CreateNewUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to create user",
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
