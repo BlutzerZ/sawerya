@@ -7,10 +7,14 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestUserService(t *testing.T) {
+	err := godotenv.Load("../../.env")
+	assert.Equal(t, nil, err, "result must be nil")
+
 	configs.InitDB()
 
 	s := NewUserService()
@@ -53,6 +57,9 @@ func TestUserService(t *testing.T) {
 }
 
 func TestAlertService(t *testing.T) {
+	err := godotenv.Load("../../.env")
+	assert.Equal(t, nil, err, "result must be nil")
+
 	configs.InitDB()
 	s := NewAlertService()
 
@@ -81,15 +88,19 @@ func TestAlertService(t *testing.T) {
 }
 
 func TestTransactionService(t *testing.T) {
+	err := godotenv.Load("../../.env")
+	assert.Equal(t, nil, err, "result must be nil")
+
 	configs.InitDB()
 	s := NewTransactionService()
 
-	req := new(dto.CreateTransactionRequest)
-	req.Amount = 5000
-	req.Sender = "jamal"
-	req.Email = "pler@gmail.com"
-	req.Type = 1
-
+	req := dto.CreateTransactionRequest{
+		Amount:      10000,
+		Description: "",
+		Sender:      "xjamal",
+		Email:       "pler@gmail.com",
+		Type:        1,
+	}
 	transaction := models.Transaction{
 		Amount:      req.Amount,
 		Description: req.Description,
@@ -100,7 +111,7 @@ func TestTransactionService(t *testing.T) {
 
 	t.Run("CreateTransaction", func(t *testing.T) {
 		var err error
-		transaction, err = s.CreateTransaction(req)
+		transaction, err = s.CreateTransaction(&req)
 		assert.Equal(t, nil, err, "must be nil")
 	})
 

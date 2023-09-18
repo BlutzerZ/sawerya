@@ -5,11 +5,16 @@ import (
 	"blutzerz/sawerya/configs"
 	"fmt"
 	"testing"
+	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestUserRepository(t *testing.T) {
+	err := godotenv.Load("../../.env")
+	assert.Equal(t, nil, err, "result must be nil")
+
 	configs.InitDB()
 
 	ur := NewUserRepository()
@@ -44,6 +49,9 @@ func TestUserRepository(t *testing.T) {
 }
 
 func TestAlertRepository(t *testing.T) {
+	err := godotenv.Load("../../.env")
+	assert.Equal(t, nil, err, "result must be nil")
+
 	configs.InitDB()
 
 	ar := NewAlertRepository()
@@ -86,6 +94,37 @@ func TestAlertRepository(t *testing.T) {
 	})
 }
 
-// func TestTransactionRepository(t *testing.T) {
+func TestTransactionRepository(t *testing.T) {
+	err := godotenv.Load("../../.env")
+	assert.Equal(t, nil, err, "result must be nil")
 
-// }
+	configs.InitDB()
+	tr := NewTransactionRepository()
+
+	t.Run("createTransaction", func(t *testing.T) {
+		transaction := models.Transaction{
+			Amount: 5000,
+			Sender: "testSender",
+			Email:  "test@email.com",
+			TypeID: 1,
+		}
+
+		err := tr.CreateNewTransaction(&transaction)
+		assert.Equal(t, nil, err, "result must be nil")
+	})
+
+	t.Run("updateTransaction", func(t *testing.T) {
+		tm, err := time.Parse("2006-01-02 15:04:05.000", "2023-09-18 07:43:41.285")
+		assert.Equal(t, nil, err, "result must be nil")
+
+		updateTransaction := models.Transaction{
+			ID:            "sawerya-Ynmm00fn7ErCq8L5",
+			Status:        "PAID",
+			PaymentMethod: "BANK_TRANSFER",
+			PaidAt:        tm,
+		}
+
+		err = tr.UpdateTransaction(&updateTransaction)
+		assert.Equal(t, nil, err, "result must be nil")
+	})
+}
