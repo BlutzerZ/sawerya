@@ -14,6 +14,7 @@ type User struct {
 	Password  string `gorm:"type:string; size:72; not null"`
 	CreatedAt uint   `gorm:"type:integer; not null"`
 	UpdatedAt uint   `gorm:"type:integer; not null"`
+	DeletedAt uint   `gorm:"type:integer; default:null"`
 	Alert     *Alert
 }
 

@@ -3,6 +3,7 @@ package repository
 import (
 	"blutzerz/sawerya/api/models"
 	"blutzerz/sawerya/configs"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -62,7 +63,7 @@ func (ur *UserRepository) Update(ID int, field string, value string) error {
 func (ur *UserRepository) Delete(ID int) error {
 	tx := ur.DB.Begin()
 
-	err := tx.Delete(&models.User{}, ID).Error
+	err := tx.Model(&models.User{}).Where("id = ?", ID).Update("deleted_at", time.Now().Unix()).Error
 	if err != nil {
 		tx.Rollback()
 		return err
