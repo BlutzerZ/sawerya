@@ -10,7 +10,7 @@ import (
 func OverlayRoutes(group *gin.RouterGroup) {
 	ac := controllers.NewAlertController()
 
-	group.GET("/overlay/alert/:id", middleware.JWTAuth(), ac.GetAlertByUserID)
+	group.GET("/overlay/alert/:id", ac.GetAlertByUserID) // No Need Middleware bcs it will be accessed in stream clients
 	group.PUT("/overlay/alert", middleware.JWTAuth(), ac.UpdateAlert)
 	group.PUT("/overlay/alert/design", middleware.JWTAuth(), ac.UpdateAlertDesign)
 
