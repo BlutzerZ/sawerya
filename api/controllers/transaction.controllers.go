@@ -49,11 +49,17 @@ func (tc *TransactionController) CreatePayment(c *gin.Context) {
 
 	fmt.Println(transaction)
 	resp, err := tc.service.CreateInvoice(&transaction)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"data": resp,
 	})
 
-	return
 }
 
 func (tc *TransactionController) PaymentCallback(c *gin.Context) {
