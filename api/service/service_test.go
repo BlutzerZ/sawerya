@@ -16,7 +16,7 @@ func TestUserService(t *testing.T) {
 	assert.Equal(t, nil, err, "result must be nil")
 
 	configs.InitDB()
-	
+
 	s := NewUserService()
 
 	t.Run("createUser", func(t *testing.T) {
@@ -36,22 +36,26 @@ func TestUserService(t *testing.T) {
 
 	t.Run("UpdateUsername", func(t *testing.T) {
 		req := new(dto.UpdateUsernameRequest)
-		req.ID = 1
+		ID := 1
 		req.Username = "test123"
 		req.Password = "testpwd123"
-		result := s.UpdateUsername(req)
+		result := s.UpdateUsername(uint(ID), req)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("UpdatePassword", func(t *testing.T) {
 		req := new(dto.UpdatePasswordRequest)
-		req.ID = 1
+		ID := 1
 		req.OldPassword = "testpwd123"
 		req.Password = "testnewpwd123"
-		result := s.UpdatePassword(req)
+		result := s.UpdatePassword(uint(ID), req)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("DeleteUser", func(t *testing.T) {
-		result := s.DeleteUser(1)
+		req := new(dto.DeleteUserRequest)
+		ID := 3
+		req.Password = "cobapassword"
+
+		result := s.DeleteUser(uint(ID), req)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 }

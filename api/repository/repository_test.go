@@ -34,11 +34,19 @@ func TestUserRepository(t *testing.T) {
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("updateUsername", func(t *testing.T) {
-		result := ur.Update(1, "username", "testnew")
+		user := models.User{
+			ID:       1,
+			Username: "test3",
+		}
+		result := ur.Update(&user)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("updatePassword", func(t *testing.T) {
-		result := ur.Update(1, "password", "passwordnew")
+		user := models.User{
+			ID:       1,
+			Password: "testpassword3",
+		}
+		result := ur.Update(&user)
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("delete", func(t *testing.T) {
