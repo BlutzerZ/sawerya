@@ -5,6 +5,7 @@ import (
 	"blutzerz/sawerya/api/models"
 	"blutzerz/sawerya/configs"
 	"blutzerz/sawerya/helpers"
+	"errors"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -31,6 +32,12 @@ func (as *AuthService) Login(req *dto.LoginUserRequest) (string, error) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
 		return "", err
+	}
+
+	// Check if user is deleted
+	if user.DeletedAt != 0 {
+		custError := errors.New("User is Deleted")
+		return "", custError
 	}
 
 	acessToken, err := helpers.GenerateAccessToken(user.ID, user.Username)
