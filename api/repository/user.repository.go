@@ -31,7 +31,7 @@ func (ur *UserRepository) Create(user models.User) error {
 	return err
 }
 
-func (ur *UserRepository) FindByID(ID int) (models.User, error) {
+func (ur *UserRepository) FindByID(ID uint) (models.User, error) {
 	var user models.User
 
 	err := ur.DB.Where("id = ?", ID).First(&user).Error
@@ -47,10 +47,10 @@ func (ur *UserRepository) FindAll() ([]models.User, error) {
 	return users, err
 }
 
-func (ur *UserRepository) Update(ID int, field string, value string) error {
+func (ur *UserRepository) Update(user *models.User) error {
 	tx := ur.DB.Begin()
 
-	err := tx.Model(&models.User{}).Where("id = ?", ID).Update(field, value).Error
+	err := tx.Model(&models.User{}).Where("id = ?", user.ID).Updates(&user).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -60,7 +60,7 @@ func (ur *UserRepository) Update(ID int, field string, value string) error {
 	return nil
 }
 
-func (ur *UserRepository) Delete(ID int) error {
+func (ur *UserRepository) Delete(ID uint) error {
 	tx := ur.DB.Begin()
 
 	err := tx.Model(&models.User{}).Where("id = ?", ID).Update("deleted_at", time.Now().Unix()).Error

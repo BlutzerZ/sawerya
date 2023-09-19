@@ -32,7 +32,7 @@ func (s *UserService) CreateUser(req *dto.RegisterUserRequest) error {
 	return err
 }
 
-func (s *UserService) GetUserByID(ID int) (models.User, error) {
+func (s *UserService) GetUserByID(ID uint) (models.User, error) {
 	user, err := s.repository.FindByID(ID)
 
 	return user, err
@@ -44,11 +44,11 @@ func (s *UserService) GetAllUser() ([]models.User, error) {
 	return users, err
 }
 
-func (s *UserService) UpdateUsername(req *dto.UpdateUsernameRequest) error {
+func (s *UserService) UpdateUsername(ID uint, req *dto.UpdateUsernameRequest) error {
 	var err error
 
 	// validate password
-	isMatch, err := s.isPasswordMatch(req.ID, req.Password)
+	isMatch, err := s.isPasswordMatch(ID, req.Password)
 	if err != nil {
 		return err
 	}
@@ -59,15 +59,20 @@ func (s *UserService) UpdateUsername(req *dto.UpdateUsernameRequest) error {
 		return err
 	}
 	// update username
-	err = s.repository.Update(req.ID, "username", req.Username)
+	user := models.User{
+		ID:       ID,
+		Username: req.Username,
+	}
+
+	err = s.repository.Update(&user)
 
 	return err
 }
 
-func (s *UserService) UpdatePassword(req *dto.UpdatePasswordRequest) error {
+func (s *UserService) UpdatePassword(ID uint, req *dto.UpdatePasswordRequest) error {
 
 	// validate password
-	isMatch, err := s.isPasswordMatch(req.ID, req.OldPassword)
+	isMatch, err := s.isPasswordMatch(ID, req.OldPassword)
 	if err != nil {
 		return err
 	}
@@ -77,19 +82,38 @@ func (s *UserService) UpdatePassword(req *dto.UpdatePasswordRequest) error {
 
 		return err
 	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
 	// update password
-	// err = s.repository.Update(ID, "password", req.Password)
+	user := models.User{
+		ID:       ID,
+		Password: string(hash),
+	}
+	err = s.repository.Update(&user)
 
 	return err
 }
 
-func (s *UserService) DeleteUser(ID int) error {
-	err := s.repository.Delete(ID)
+func (s *UserService) DeleteUser(ID uint, req *dto.DeleteUserRequest) error {
+	isMatch, err := s.isPasswordMatch(ID, req.Password)
+	if err != nil {
+		return err
+	}
+	if !isMatch {
+		msg := "invalid password"
+		err = errors.New(msg)
+
+		return err
+	}
+
+	err = s.repository.Delete(ID)
 
 	return err
 }
 
-func (s *UserService) isPasswordMatch(ID int, inputPassword string) (bool, error) {
+func (s *UserService) isPasswordMatch(ID uint, inputPassword string) (bool, error) {
 	var user models.User
 	user, err := s.repository.FindByID(ID)
 	if err != nil {

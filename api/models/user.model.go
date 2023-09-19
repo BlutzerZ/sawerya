@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -25,6 +26,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println(u.Password)
 	tx.Statement.SetColumn("Password", hash)
 
 	// generate time
@@ -33,17 +35,24 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-func (u *User) BeforeUpdate(tx *gorm.DB) error {
-	if tx.Statement.Changed("Password") {
-		// hashing password
-		hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return err
-		}
-		tx.Statement.SetColumn("Password", hash)
-	}
+func (u *User) AfterUpdate(tx *gorm.DB) error {
+	fmt.Println(u.Password)
+	fmt.Println(u.ID)
+
+	// swicth to service layer bcs idk about this bug
+
+	// if tx.Statement.Changed("Password") {
+	// 	// hashing password
+	// 	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	tx.Statement.SetColumn("Password", hash)
+
+	// }
 	// generate time
 	tx.Statement.SetColumn("UpdatedAt", time.Now().Unix())
+
 	return nil
 }
 
