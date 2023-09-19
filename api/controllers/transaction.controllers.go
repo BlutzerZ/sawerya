@@ -5,6 +5,7 @@ import (
 	"blutzerz/sawerya/api/service"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -56,6 +57,16 @@ func (tc *TransactionController) CreatePayment(c *gin.Context) {
 }
 
 func (tc *TransactionController) PaymentCallback(c *gin.Context) {
+	// Validate Header
+	callbackToken := c.GetHeader("x-callback-token")
+	shouldBeCallbackToken := os.Getenv("XENDIT_CALLBACK_TOKEN")
+	if callbackToken != shouldBeCallbackToken {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"message": "invalid callback token",
+		})
+		return
+	}
+
 	req := new(dto.InvoiceCallbackRequest)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {

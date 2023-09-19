@@ -16,7 +16,7 @@ func TestUserService(t *testing.T) {
 	assert.Equal(t, nil, err, "result must be nil")
 
 	configs.InitDB()
-
+	
 	s := NewUserService()
 
 	t.Run("createUser", func(t *testing.T) {
