@@ -74,7 +74,6 @@ func (ac *AlertController) UpdateAlert(c *gin.Context) {
 	}
 	ID, _ := rawID.(uint)
 
-	fmt.Println(req.EnableGif)
 	if req.EnableGif != 1 {
 		req.EnableGif = 0 // maybe temporary fix for can't send 0 value
 	}
