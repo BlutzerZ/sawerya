@@ -20,9 +20,9 @@ func TestUserRepository(t *testing.T) {
 	ur := NewUserRepository()
 
 	user := models.User{
-		Username: "test",
-		Email:    "test@email.com",
-		Password: "test",
+		Username: "test3",
+		Email:    "test3@email.com",
+		Password: "test3",
 	}
 
 	t.Run("create", func(t *testing.T) {
@@ -42,7 +42,7 @@ func TestUserRepository(t *testing.T) {
 		assert.Equal(t, nil, result, "result must be nil")
 	})
 	t.Run("delete", func(t *testing.T) {
-		result := ur.Delete(1)
+		result := ur.Delete(35)
 		assert.Equal(t, nil, result, "result must be nil")
 
 	})
