@@ -1,8 +1,12 @@
 package configs
 
-import "github.com/golang-jwt/jwt/v5"
+import (
+	"os"
 
-var JWT_KEY = []byte("ininamanyakeyyamassehjanganlupa")
+	"github.com/golang-jwt/jwt/v5"
+)
+
+var JWT_KEY = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 type JWTClaims struct {
 	ID        uint   `json:"id"`
