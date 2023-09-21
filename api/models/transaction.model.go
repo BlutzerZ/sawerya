@@ -13,6 +13,8 @@ type Transaction struct {
 	Amount          uint
 	Description     string
 	Sender          string
+	ReceiverID      uint
+	User            User `gorm:"foreignKey:ReceiverID"`
 	Email           string
 	PaymentMethod   string
 	Status          string
@@ -21,11 +23,6 @@ type Transaction struct {
 	UpdatedAt       time.Time
 	TypeID          uint
 	TransactionType TransactionType `gorm:"foreignKey:TypeID"`
-}
-
-type TransactionType struct {
-	ID   uint `gorm:"primaryKey"`
-	Type string
 }
 
 func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
