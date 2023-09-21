@@ -115,7 +115,7 @@ func TestTransactionService(t *testing.T) {
 
 	t.Run("CreateTransaction", func(t *testing.T) {
 		var err error
-		transaction, err = s.CreateTransaction(&req)
+		transaction, err = s.CreateTransaction(3, &req)
 		assert.Equal(t, nil, err, "must be nil")
 	})
 

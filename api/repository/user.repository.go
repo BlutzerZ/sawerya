@@ -39,6 +39,14 @@ func (ur *UserRepository) FindByID(ID uint) (models.User, error) {
 	return user, err
 }
 
+func (ur *UserRepository) FindByUsername(username string) (models.User, error) {
+	var user models.User
+
+	err := ur.DB.Where("username = ?", username).First(&user).Error
+
+	return user, err
+}
+
 func (ur *UserRepository) FindAll() ([]models.User, error) {
 	var users []models.User
 

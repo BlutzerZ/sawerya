@@ -12,16 +12,19 @@ import (
 )
 
 type TransactionController struct {
-	service *service.TransactionService
+	service     *service.TransactionService
+	serviceUser *service.UserService
 }
 
 func NewTransactionController() *TransactionController {
 	return &TransactionController{
-		service: service.NewTransactionService(),
+		service:     service.NewTransactionService(),
+		serviceUser: service.NewUserService(),
 	}
 }
 
 func (tc *TransactionController) CreatePayment(c *gin.Context) {
+	// REQ BODY
 	req := new(dto.CreateTransactionRequest)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
@@ -39,7 +42,16 @@ func (tc *TransactionController) CreatePayment(c *gin.Context) {
 		return
 	}
 
-	transaction, err := tc.service.CreateTransaction(req)
+	// Service
+	user, err := tc.serviceUser.GetUserByUsername(req.Receiver)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	transaction, err := tc.service.CreateTransaction(user.ID, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err,

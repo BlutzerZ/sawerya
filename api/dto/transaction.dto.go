@@ -6,6 +6,7 @@ type CreateTransactionRequest struct {
 	Amount      uint   `json:"amount" binding:"required"`
 	Description string `json:"description"`
 	Sender      string `json:"sender" binding:"required"`
+	Receiver    string `json:"receiver" binding:"required"`
 	Email       string `json:"email" binding:"required"`
 	Type        uint   `json:"type" binding:"required"`
 }

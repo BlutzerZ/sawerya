@@ -38,6 +38,12 @@ func (s *UserService) GetUserByID(ID uint) (models.User, error) {
 	return user, err
 }
 
+func (s *UserService) GetUserByUsername(username string) (models.User, error) {
+	user, err := s.repository.FindByUsername(username)
+
+	return user, err
+}
+
 func (s *UserService) GetAllUser() ([]models.User, error) {
 	users, err := s.repository.FindAll()
 

@@ -77,12 +77,13 @@ func (s *TransactionService) CreateInvoice(transaction *models.Transaction) (*dt
 	return createTransactionResponse, nil
 }
 
-func (s *TransactionService) CreateTransaction(req *dto.CreateTransactionRequest) (models.Transaction, error) {
+func (s *TransactionService) CreateTransaction(receiverID uint, req *dto.CreateTransactionRequest) (models.Transaction, error) {
 
 	transaction := models.Transaction{
 		Amount:      req.Amount,
 		Description: req.Description,
 		Sender:      req.Sender,
+		ReceiverID:  receiverID,
 		Email:       req.Email,
 		TypeID:      req.Type,
 	}
