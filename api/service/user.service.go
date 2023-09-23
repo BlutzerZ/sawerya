@@ -40,6 +40,10 @@ func (s *UserService) GetUserByID(ID uint) (models.User, error) {
 
 func (s *UserService) GetUserByUsername(username string) (models.User, error) {
 	user, err := s.repository.FindByUsername(username)
+	if user.DeletedAt == 0 {
+		custErr := errors.New("user not found")
+		return models.User{}, custErr
+	}
 
 	return user, err
 }

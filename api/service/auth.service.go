@@ -36,7 +36,7 @@ func (as *AuthService) Login(req *dto.LoginUserRequest) (string, error) {
 
 	// Check if user is deleted
 	if user.DeletedAt != 0 {
-		custError := errors.New("User is Deleted")
+		custError := errors.New("user is deleted")
 		return "", custError
 	}
 
