@@ -60,9 +60,6 @@ func (s *TransactionService) CreateInvoice(transaction *models.Transaction) (*dt
 	}
 	defer resp.Body.Close()
 
-	// Membaca respons
-	fmt.Println("Status Code:", resp.Status)
-
 	// RESPONSE BODY
 	var createTransactionResponse *dto.CreateTransactionResponse
 	decoder := json.NewDecoder(resp.Body)
@@ -71,8 +68,6 @@ func (s *TransactionService) CreateInvoice(transaction *models.Transaction) (*dt
 		return nil, err
 
 	}
-
-	fmt.Println("Response Body:", createTransactionResponse)
 
 	return createTransactionResponse, nil
 }
